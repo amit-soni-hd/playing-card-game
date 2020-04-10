@@ -14,7 +14,13 @@ import java.util.Stack;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class CardGameService implements Game {
+public class CardGameService  implements Game, Runnable {
+
+    private List<Player> players;
+
+    public CardGameService(List<Player> players) {
+        this.players = players;
+    }
 
     /**
      * used for start the game between two player
@@ -74,7 +80,8 @@ public class CardGameService implements Game {
 
                 if(result) {
                     List<Card> collectCards = table.stream().collect(Collectors.toList());
-                    log.info("Win cards from table {}", collectCards.toArray());
+                    log.info("{} win cards from table ", player.getPlayerName());
+                    printWinCards(collectCards);
                     winCardsPile.add(currentCard);
                     winCardsPile.addAll(collectCards);
                     table.removeAllElements();
@@ -84,6 +91,17 @@ public class CardGameService implements Game {
             }
             playerService.giveChanceToOther(players);
         }
+        declareWinner(playerService, players);
+    }
+
+    /**
+     * method used for print the winner card by the player
+     * @param collectCards
+     */
+    private void printWinCards(List<Card> collectCards) {
+
+        collectCards.forEach( (card -> log.info("Card type {}, card numer {}",
+                card.getCardType(), card.getCardNumber())));
     }
 
     /**
@@ -94,5 +112,22 @@ public class CardGameService implements Game {
      */
     private boolean compareCard(Card topCard, Card currentCard) {
         return topCard.getCardNumber().compareTo(currentCard.getCardNumber()) > 0 ? true : false;
+    }
+
+    /**
+     * method used for declare the winner
+     * @param playerService player service get the winner
+     * @param players list of participant
+     */
+    private void declareWinner(PlayerService playerService, List<Player> players) {
+
+        Player winner = playerService.getWinner(players);
+        log.info("{} win the match...............", winner.getPlayerName());
+
+    }
+
+    @Override
+    public void run() {
+        startGame(players);
     }
 }
