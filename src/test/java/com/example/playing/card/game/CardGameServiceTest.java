@@ -58,6 +58,4 @@ public class CardGameServiceTest {
         cardGameService.startGame(null);
     }
 
-
-
 }
