@@ -49,8 +49,15 @@ public class CardGameServiceTest {
     };
 
     @Test(expected = RuntimeException.class)
-    public void startGame() {
+    public void startGameTest() {
         cardGameService.startGame(players);
     }
+
+    @Test(expected = NullPointerException.class)
+    public void startGameTest_1() {
+        cardGameService.startGame(null);
+    }
+
+
 
 }
