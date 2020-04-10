@@ -96,7 +96,7 @@ public class CardGameService  implements Game, Runnable {
 
     /**
      * method used for print the winner card by the player
-     * @param collectCards
+     * @param collectCards list of collected card from table
      */
     private void printWinCards(List<Card> collectCards) {
 
